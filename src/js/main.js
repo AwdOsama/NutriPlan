@@ -32,6 +32,7 @@ foodLogUI.renderLoggedMeals(loggedMeals);
 foodLogUI.updateSummary(loggedMeals);
 foodLogUI.renderWeeklyOverview(loggedMeals);
 foodLogUI.updateStatistics(loggedMeals);
+foodLogUI.updateFoodLogDate();
 
 // Product Search
 
