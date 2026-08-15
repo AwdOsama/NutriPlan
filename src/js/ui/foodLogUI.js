@@ -211,9 +211,9 @@ export class FoodLogUI {
     });
 
     this.caloriesSummary.textContent = `${calories} kcal`;
-    this.proteinSummary.textContent = `${protein} g`;
-    this.carbsSummary.textContent = `${carbs} g`;
-    this.fatSummary.textContent = `${fat} g`;
+    this.proteinSummary.textContent = `${protein.toFixed(1)} g`;
+    this.carbsSummary.textContent = `${carbs.toFixed(1)} g`;
+    this.fatSummary.textContent = `${fat.toFixed(1)} g`;
 
     const caloriesPercentage = (calories / 2000) * 100;
 
