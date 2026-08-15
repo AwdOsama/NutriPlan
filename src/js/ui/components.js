@@ -12,8 +12,8 @@ export class HomeUI {
     this.foodLogSection = document.getElementById("foodlog-section");
     this.sidebarOverlay = document.getElementById("sidebar-overlay");
     this.sidebar = document.getElementById("sidebar");
-    // this.headerMenuBtn = document.getElementById("header-menu-btn");
-    // this.sidebarCloseBtn = document.getElementById("sidebar-close-btn");
+    this.headerMenuBtn = document.getElementById("header-menu-btn");
+    this.sidebarCloseBtn = document.getElementById("sidebar-close-btn");
     // للسايد بار في الموبيل بس مش شغال خالص
     this.mainContent = document.getElementById("main-content");
     this.appLoadingOverlay = document.getElementById("app-loading-overlay");
@@ -98,25 +98,28 @@ export class HomeUI {
     this.currentNutrition = null;
     this.logMealBtn = document.getElementById("log-meal-btn");
   }
-  // setupSidebar() {
-  //   this.headerMenuBtn.addEventListener("click", () => {
+  setupSidebar() {
+    this.headerMenuBtn.addEventListener("click", () => {
 
-  //     this.sidebar.classList.remove("hidden");
-  //     this.sidebarOverlay.classList.remove("hidden");
+      this.sidebar.classList.remove("hidden");
+      this.sidebarOverlay.classList.add("active");
+      this.sidebar.classList.add("open")
 
-  //   });
+    });
 
-  //   this.sidebarCloseBtn.addEventListener("click", () => {
-  //     this.sidebar.classList.add("hidden");
-  //     this.sidebarOverlay.classList.add("hidden");
-  //   });
+    this.sidebarCloseBtn.addEventListener("click", () => {
+      this.sidebar.classList.add("hidden");
+      this.sidebarOverlay.classList.remove("active");
+            this.sidebar.classList.remove("open")
 
-  //   this.sidebarOverlay.addEventListener("click", () => {
-  //     this.sidebar.classList.add("hidden");
-  //     this.sidebarOverlay.classList.add("hidden");
-  //   });
-  // }
-  // للسايد بار في الموبيل بس مش شغال خالص
+
+    });
+
+    this.sidebarOverlay.addEventListener("click", () => {
+      this.sidebar.classList.remove("open");
+      this.sidebarOverlay.classList.remove("active");
+    });
+  }
   resetNavLinks() {
     const links = [this.mealsLink, this.scannerLink, this.foodLogLink];
 

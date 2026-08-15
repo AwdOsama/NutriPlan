@@ -230,8 +230,7 @@ productUI.productModal.addEventListener("click", (e) => {
 homeUI.setupViewToggle();
 homeUI.setupMealDetails();
 homeUI.setupNavigation();
-// homeUI.setupSidebar();
-// للسايد بار في الموبيل بس مش شغال خالص
+homeUI.setupSidebar();
 
 const activePage = sessionStorage.getItem("activePage");
 
