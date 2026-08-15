@@ -31,7 +31,16 @@ export class FoodLogUI {
     this.onBrowseRecipes = null;
     this.onScanProduct = null;
   }
+  updateFoodLogDate() {
+    const today = new Date();
 
+    this.foodLogDate.textContent = today.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
   btnsCallBack(onBrowseRecipes, onScanProduct) {
     this.onBrowseRecipes = onBrowseRecipes;
     this.onScanProduct = onScanProduct;
@@ -341,6 +350,7 @@ export class FoodLogUI {
     this.updateSummary(meals);
     this.renderWeeklyOverview(meals);
     this.updateStatistics(meals);
+    this.updateFoodLogDate();
   }
   getCurrentWeekDays() {
     const today = new Date();
