@@ -10,7 +10,6 @@ export class ProductUI {
     this.productsCount = document.querySelector("#products-count");
 
     this.currentProducts = [];
-    this.displayedProducts = [];
     this.productModal = document.querySelector("#product-modal");
     this.modalNutriScore = document.querySelector("#modal-nutri-score");
     this.modalNova = document.querySelector("#modal-nova");
@@ -62,7 +61,6 @@ export class ProductUI {
   }
   renderProducts(products) {
     this.currentProducts = products || [];
-    this.displayedProducts = products || [];
 
     this.productsGrid.innerHTML = "";
 
@@ -270,7 +268,6 @@ export class ProductUI {
   }
 
   renderFilteredProducts(products) {
-    this.displayedProducts = products || [];
 
     this.productsGrid.innerHTML = "";
 
