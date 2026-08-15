@@ -10,6 +10,8 @@ export class ProductUI {
     this.productsCount = document.querySelector("#products-count");
 
     this.currentProducts = [];
+    this.allProducts = [];
+
     this.productModal = document.querySelector("#product-modal");
     this.modalNutriScore = document.querySelector("#modal-nutri-score");
     this.modalNova = document.querySelector("#modal-nova");
@@ -61,6 +63,7 @@ export class ProductUI {
   }
   renderProducts(products) {
     this.currentProducts = products || [];
+    this.allProducts = products || [];
 
     this.productsGrid.innerHTML = "";
 
@@ -255,20 +258,19 @@ export class ProductUI {
   }
   filterProductsByNutriScore(grade) {
     if (!grade) {
-      this.renderFilteredProducts(this.currentProducts);
+      this.renderProducts(this.allProducts);
       return;
     }
 
-    const filteredProducts = this.currentProducts.filter(
+    const filteredProducts = this.allProducts.filter(
       (product) =>
         product.nutritionGrade?.toLowerCase() === grade.toLowerCase(),
     );
 
     this.renderFilteredProducts(filteredProducts);
   }
-
   renderFilteredProducts(products) {
-
+    this.currentProducts = products || [];
     this.productsGrid.innerHTML = "";
 
     if (!products || products.length === 0) {
@@ -455,5 +457,15 @@ export class ProductUI {
 
     this.productAllergens.textContent =
       allergens || "Allergens information not available.";
+  }
+  showError(message = "Something went wrong. Please try again.") {
+    this.productsGrid.innerHTML = `
+    <div class="col-span-full text-center py-12 text-red-500">
+      <i class="fa-solid fa-circle-exclamation text-4xl mb-3"></i>
+      <p class="font-semibold">${message}</p>
+    </div>
+  `;
+
+    this.productsCount.textContent = "Unable to load products";
   }
 }

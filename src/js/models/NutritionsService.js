@@ -24,8 +24,11 @@ export class NutritionService {
       return await response.json();
     } catch (error) {
       if (error.name === "TypeError") {
-        throw new Error("Failed to fetch");
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
       }
+
       throw error;
     }
   }

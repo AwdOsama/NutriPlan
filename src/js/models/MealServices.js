@@ -19,8 +19,11 @@ export class MealService {
       return data.results.map((meal) => new Meal(meal));
     } catch (error) {
       if (error.name === "TypeError") {
-        throw new Error("Failed to fetch");
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
       }
+
       throw error;
     }
   }
@@ -32,7 +35,13 @@ export class MealService {
       const data = await response.json();
       return data.results;
     } catch (error) {
-      throw new Error("Failed to fetch");
+      if (error.name === "TypeError") {
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
+      }
+
+      throw error;
     }
   }
 
@@ -43,7 +52,13 @@ export class MealService {
       const data = await response.json();
       return data.results;
     } catch (error) {
-      throw new Error("Failed to fetch");
+      if (error.name === "TypeError") {
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
+      }
+
+      throw error;
     }
   }
 
@@ -63,7 +78,13 @@ export class MealService {
       const data = await response.json();
       return data.results.map((meal) => new Meal(meal));
     } catch (error) {
-      throw new Error("Failed to fetch");
+      if (error.name === "TypeError") {
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
+      }
+
+      throw error;
     }
   }
 
@@ -74,7 +95,13 @@ export class MealService {
       const data = await response.json();
       return new Meal(data.result);
     } catch (error) {
-      throw new Error("Failed to fetch");
+      if (error.name === "TypeError") {
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
+      }
+
+      throw error;
     }
   }
 }

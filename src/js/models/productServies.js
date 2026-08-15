@@ -18,21 +18,26 @@ export class ProductService {
       return await response.json();
     } catch (error) {
       if (error.name === "TypeError") {
-        throw new Error("Failed to fetch products");
+        throw new Error(
+          "Unable to connect to the server. Please check your internet connection.",
+        );
       }
 
       throw error;
     }
   }
-
   async getProductByBarcode(barcode) {
     try {
       const response = await fetch(
         `${this.baseURL}/products/barcode/${barcode}`,
       );
 
-      if (!response.ok) {
+      if (response.status === 404) {
         throw new Error("Product not found");
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to get product");
       }
 
       return await response.json();

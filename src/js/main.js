@@ -35,7 +35,6 @@ foodLogUI.updateStatistics(loggedMeals);
 
 // Product Search
 
-productUI.searchButton.addEventListener("click", async () => {
 const searchProducts = async () => {
   const query = productUI.searchInput.value.trim();
 
@@ -50,6 +49,7 @@ const searchProducts = async () => {
     productUI.renderProducts(data.results);
   } catch (error) {
     console.error(error);
+    productUI.showError(error.message);
   } finally {
     productUI.searchButton.disabled = false;
     productUI.searchButton.innerHTML = `
@@ -66,8 +66,6 @@ productUI.searchInput.addEventListener("keydown", (e) => {
     searchProducts();
   }
 });
-});
-
 // Product Barcode
 
 productUI.barcodeButton.addEventListener("click", async () => {
@@ -78,25 +76,22 @@ productUI.barcodeButton.addEventListener("click", async () => {
   try {
     const data = await productService.getProductByBarcode(barcode);
 
-    // console.log( data);
+    const product = data.result;
 
-    productUI.renderProducts([data.result]);
+    productUI.renderProducts([product]);
+
+    productUI.renderProductModal(product);
+    productUI.showProductModal();
   } catch (error) {
-    productUI.productsGrid.innerHTML = `
-      <div class="col-span-full text-center py-12 text-gray-500">
-        <i class="fa-solid fa-box-open text-4xl mb-3"></i>
-        <p>No products to display</p>
-        <p class="text-sm mt-2">
-          Search for a product or browse by category
-        </p>
-      </div>
-    `;
+    console.error(error);
+
+    productUI.showError(error.message);
 
     Swal.fire({
       toast: true,
       position: "bottom-end",
       icon: "error",
-      title: "Product not found in database",
+      title: error.message,
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
@@ -130,10 +125,12 @@ try {
         productUI.renderProducts(data.results);
       } catch (error) {
         console.error(error);
+        productUI.showError(error.message);
       }
     });
 } catch (error) {
   console.error("Categories Error:", error);
+  productUI.showError(error.message);
 }
 // product grad
 document.addEventListener("click", (e) => {
@@ -168,7 +165,6 @@ productUI.productsGrid.addEventListener("click", (e) => {
   productUI.renderProductModal(product);
   productUI.showProductModal();
 });
-
 
 productUI.productModal.addEventListener("click", (e) => {
   // Close Modal
@@ -272,62 +268,85 @@ const handleMealClick = async (mealId) => {
 
 // Meals API
 
+let defaultMeals = [];
+
+// Default Meals
 try {
-  const defaultMeals = await mealService.searchMeals("chicken");
+  defaultMeals = await mealService.searchMeals("chicken");
 
   homeUI.renderRecipes(defaultMeals, handleMealClick, "chicken");
+} catch (error) {
+  console.error("Default Meals Error:", error);
 
-  const searchInput = homeUI.getSearchInput();
+  homeUI.showError(error.message);
+}
 
-  if (searchInput) {
-    searchInput.addEventListener("input", async (event) => {
-      const query = event.target.value.trim();
+// Search
+const searchInput = homeUI.getSearchInput();
 
-      if (!query) return;
+if (searchInput) {
+  searchInput.addEventListener("input", async (event) => {
+    const query = event.target.value.trim();
 
+    if (!query) return;
+
+    try {
       const meals = await mealService.searchMeals(query);
 
       homeUI.renderRecipes(meals, handleMealClick, query);
-    });
-  }
+    } catch (error) {
+      console.error("Meal Search Error:", error);
 
+      homeUI.showError(error.message);
+    }
+  });
+}
+
+// Categories
+try {
   const categories = await mealService.getCategories();
 
   homeUI.renderCategories(categories, async (category) => {
-    const meals = await mealService.filterMeals({ category });
+    try {
+      const meals = await mealService.filterMeals({ category });
 
-    homeUI.renderRecipes(meals, handleMealClick, category);
+      homeUI.renderRecipes(meals, handleMealClick, category);
+    } catch (error) {
+      console.error("Category Meals Error:", error);
+
+      homeUI.showError(error.message);
+    }
   });
+} catch (error) {
+  console.error("Categories API Error:", error);
 
+  homeUI.showError(error.message);
+}
+
+// Areas
+try {
   const areas = await mealService.getAreas();
 
   homeUI.renderAreas(areas, async (area) => {
-    if (!area) {
-      homeUI.renderRecipes(defaultMeals, handleMealClick, "chicken");
-      return;
+    try {
+      if (!area) {
+        homeUI.renderRecipes(defaultMeals, handleMealClick, "chicken");
+        return;
+      }
+
+      const meals = await mealService.filterMeals({ area });
+
+      homeUI.renderRecipes(meals, handleMealClick, area);
+    } catch (error) {
+      console.error("Area Meals Error:", error);
+
+      homeUI.showError(error.message);
     }
-
-    const meals = await mealService.filterMeals({ area });
-
-    homeUI.renderRecipes(meals, handleMealClick, area);
   });
 } catch (error) {
-  document.body.innerHTML = `
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-      "
-    >
-      <div>
-        <h1>Oops! Something went wrong.</h1>
-        <p>${error.message}</p>
-      </div>
-    </div>
-  `;
-} finally {
-  homeUI.hideAppLoading();
+  console.error("Areas API Error:", error);
+
+  homeUI.showError(error.message);
 }
+
+homeUI.hideAppLoading();

@@ -1041,4 +1041,17 @@ export class HomeUI {
         modal.remove();
       });
   }
+  showError(message = "Something went wrong. Please try again.") {
+    this.recipesGrid.innerHTML = `
+    <div class="col-span-full text-center py-12 text-red-500">
+      <i class="fa-solid fa-circle-exclamation text-4xl mb-3"></i>
+
+      <p class="font-semibold">
+        ${message}
+      </p>
+    </div>
+  `;
+
+    this.recipesCount.textContent = "Unable to load recipes";
+  }
 }
