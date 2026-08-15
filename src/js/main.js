@@ -26,14 +26,14 @@ foodLogUI.btnsCallBack(
 
 foodLogUI.ClearAll();
 
-const loggedMeals = foodLogService.getMeals();
+const todayMeals = foodLogService.getTodayMeals();
+const allMeals = foodLogService.getMeals();
 
-foodLogUI.renderLoggedMeals(loggedMeals);
-foodLogUI.updateSummary(loggedMeals);
-foodLogUI.renderWeeklyOverview(loggedMeals);
-foodLogUI.updateStatistics(loggedMeals);
+foodLogUI.renderLoggedMeals(todayMeals);
+foodLogUI.updateSummary(todayMeals);
+foodLogUI.renderWeeklyOverview(allMeals);
+foodLogUI.updateStatistics(allMeals);
 foodLogUI.updateFoodLogDate();
-
 // Product Search
 
 const searchProducts = async () => {

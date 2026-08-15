@@ -180,7 +180,7 @@ export class FoodLogUI {
 
         <button
           class="remove-foodlog-item text-gray-400 hover:text-red-500 transition-all p-2"
-          data-index="${index}"
+          data-id="${meal.id}"
         >
           <i class="fa-solid fa-trash-can"></i>
         </button>
@@ -198,9 +198,9 @@ export class FoodLogUI {
 
     deleteButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        const index = Number(button.dataset.index);
+        const id = button.dataset.id;
 
-        this.foodLogService.deleteMeal(index);
+        this.foodLogService.deleteMeal(id);
 
         this.updateFoodLog();
       });
@@ -319,22 +319,22 @@ export class FoodLogUI {
   ClearAll() {
     this.clearFoodLogBtn.addEventListener("click", () => {
       Swal.fire({
-        title: "Clear All Meals?",
-        text: "This will remove all your logged meals.",
+        title: "Clear Today's Meals?",
+        text: "This will remove all meals logged today.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, Clear All",
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.foodLogService.clearMeals();
+          this.foodLogService.clearTodayMeals();
 
           this.updateFoodLog();
 
           Swal.fire({
             icon: "success",
             title: "Cleared!",
-            text: "All meals have been cleared.",
+            text: "Today's meals have been cleared.",
             timer: 1500,
             showConfirmButton: false,
           });
@@ -343,13 +343,17 @@ export class FoodLogUI {
     });
   }
   updateFoodLog() {
-    const meals = this.foodLogService.getMeals();
+    const todayMeals = this.foodLogService.getTodayMeals();
+    const allMeals = this.foodLogService.getMeals();
 
-    this.renderLoggedMeals(meals);
+    this.renderLoggedMeals(todayMeals);
 
-    this.updateSummary(meals);
-    this.renderWeeklyOverview(meals);
-    this.updateStatistics(meals);
+    this.updateSummary(todayMeals);
+
+    this.renderWeeklyOverview(allMeals);
+
+    this.updateStatistics(allMeals);
+
     this.updateFoodLogDate();
   }
   getCurrentWeekDays() {
